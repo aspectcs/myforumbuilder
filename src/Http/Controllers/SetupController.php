@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Config;
 
 class SetupController extends Controller
 {
@@ -79,11 +80,16 @@ class SetupController extends Controller
                     'DB_USERNAME.required' => 'The database username is required.',
                     'DB_PASSWORD.required' => 'The database password is required.',
                 ]);
-                foreach ($insert as $key => $value) {
-                    put_permanent_env($key, trim($value));
-                }
+                $connection = env('DB_CONNECTION', 'mysql');
+                Config::set('database.connections.' . $connection . '.host', $insert['DB_HOST']);
+                Config::set('database.connections.' . $connection . '.database', $insert['DB_DATABASE']);
+                Config::set('database.connections.' . $connection . '.username', $insert['DB_USERNAME']);
+                Config::set('database.connections.' . $connection . '.password', $insert['DB_PASSWORD']);
                 try {
                     DB::connection()->getPDO();
+                    foreach ($insert as $key => $value) {
+                        put_permanent_env($key, trim($value));
+                    }
                     $message = 'Database is connected. Database Name is : ' . DB::connection()->getDatabaseName();
                 } catch (Exception $e) {
                     return back()->withErrors([
