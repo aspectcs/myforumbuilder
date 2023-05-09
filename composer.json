@@ -1,0 +1,42 @@
+{
+    "name": "aspectcs/myforumbuilder",
+    "description": "This is package create by aspect creative solutions this is an AI forum Builder",
+    "type": "library",
+    "require": {
+        "openai-php/laravel": "0.4.3",
+        "yajra/laravel-datatables-oracle": "^10.0"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Aspectcs\\MyForumBuilder\\": "src/",
+            "Aspectcs\\MyForumBuilder\\Database\\Factories\\": "database/factories/",
+            "Aspectcs\\MyForumBuilder\\Database\\Seeders\\": "database/seeders/"
+        },
+        "files": [
+            "src/Helpers/MyForumBuilderHelper.php"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Aspectcs\\MyForumBuilder\\MyForumBuilderServiceProvider"
+            ],
+            "aliases": {
+                "MyForumBuilder": "Aspectcs\\MyForumBuilder\\Facades\\MyForumBuilder"
+            }
+        }
+    },
+    "authors": [
+        {
+            "name": "bunnybreak",
+            "email": "45329382+bunnybreak@users.noreply.github.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    }
+}
