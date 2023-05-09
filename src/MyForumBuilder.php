@@ -40,7 +40,7 @@ class MyForumBuilder
     public static function validateKeys($key, $secret)
     {
         $encryptor = new Encrypter(base64_decode($key), self::$cipher);
-        $response = Http::acceptJson()->withToken($encryptor->decryptString($secret))->get(self::$api_url . '/');
+        $response = Http::acceptJson()->withToken($encryptor->decryptString($secret))->post(self::$api_url . '/');
         $response->onError(function (Response $response) {
             if ($response->unauthorized()) {
                 throw new \ErrorException($response->json('message'));
@@ -57,7 +57,24 @@ class MyForumBuilder
     public static function details()
     {
         self::decryptKeys();
-        $response = Http::acceptJson()->withToken(self::$app_token)->get(self::$api_url . '/');
+        $response = Http::acceptJson()->withToken(self::$app_token)->post(self::$api_url);
+        $response->onError(function (Response $response) {
+            if ($response->unauthorized()) {
+                throw new \ErrorException($response->json('message'));
+            } else {
+                throw new \ErrorException('Something went wrong. please contact to admin.');
+            }
+        });
+        return $response;
+    }
+
+    /**
+     * @throws \ErrorException
+     */
+    public static function canGenerateQuestion()
+    {
+        self::decryptKeys();
+        $response = Http::acceptJson()->withToken(self::$app_token)->post(self::$api_url.'/');
         $response->onError(function (Response $response) {
             if ($response->unauthorized()) {
                 throw new \ErrorException($response->json('message'));
