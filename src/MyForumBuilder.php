@@ -40,7 +40,7 @@ class MyForumBuilder
     public static function validateKeys($key, $secret)
     {
         $encryptor = new Encrypter(base64_decode($key), self::$cipher);
-        $response = Http::acceptJson()->withToken($encryptor->decryptString($secret))->post(self::$api_url . '/');
+        $response = Http::acceptJson()->withToken($encryptor->decryptString($secret))->post(self::$api_url);
         $response->onError(function (Response $response) {
             if ($response->unauthorized()) {
                 throw new \ErrorException($response->json('message'));
@@ -71,10 +71,10 @@ class MyForumBuilder
     /**
      * @throws \ErrorException
      */
-    public static function canGenerateQuestion()
+    public static function generateQuestion()
     {
         self::decryptKeys();
-        $response = Http::acceptJson()->withToken(self::$app_token)->post(self::$api_url.'/');
+        $response = Http::acceptJson()->withToken(self::$app_token)->post(self::$api_url.'generate-question');
         $response->onError(function (Response $response) {
             if ($response->unauthorized()) {
                 throw new \ErrorException($response->json('message'));

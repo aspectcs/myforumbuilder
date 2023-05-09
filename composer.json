@@ -1,5 +1,6 @@
 {
     "name": "aspectcs/myforumbuilder",
+    "version": "1.0.0",
     "description": "This is package create by aspect creative solutions this is an AI forum Builder",
     "type": "library",
     "require": {

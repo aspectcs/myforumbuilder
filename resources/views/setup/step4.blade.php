@@ -15,7 +15,8 @@
                         @csrf
                         <input type="hidden" name="step" value="step4"/>
                         <div class="mb-3">
-                            <label for="ADMIN_URL_PREFIX" class="form-label">Admin url prefix (admin,forum-admin)</label>
+                            <label for="ADMIN_URL_PREFIX" class="form-label">Admin url prefix
+                                (admin,forum-admin)</label>
                             <input
                                 type="text"
                                 class="form-control"
@@ -39,16 +40,19 @@
                             />
                             @include('MyForumBuilder::admin.layouts.input-error',['name'=>'ADMIN_EMAIL'])
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-3 form-password-toggle">
                             <label for="ADMIN_PASSWORD" class="form-label">Admin password</label>
-                            <input
-                                type="password"
-                                class="form-control"
-                                id="ADMIN_PASSWORD"
-                                name="ADMIN_PASSWORD"
-                                placeholder="Enter your admin password"
-                                autofocus
-                            />
+                            <div class="input-group input-group-merge">
+                                <input
+                                    type="password"
+                                    class="form-control"
+                                    id="ADMIN_PASSWORD"
+                                    name="ADMIN_PASSWORD"
+                                    placeholder="Enter your admin password"
+                                    autofocus
+                                />
+                                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                            </div>
                             @include('MyForumBuilder::admin.layouts.input-error',['name'=>'ADMIN_PASSWORD'])
                         </div>
                         @include('MyForumBuilder::admin.layouts.alert')

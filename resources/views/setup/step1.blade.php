@@ -53,17 +53,20 @@
                             />
                             @include('MyForumBuilder::admin.layouts.input-error',['name'=>'DB_USERNAME'])
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-3 form-password-toggle">
                             <label for="DB_PASSWORD" class="form-label">Database password</label>
-                            <input
-                                type="password"
-                                class="form-control"
-                                id="DB_PASSWORD"
-                                name="DB_PASSWORD"
-                                placeholder="Enter your Database password"
-                                autofocus
-                                value="{{old('DB_PASSWORD')}}"
-                            />
+                            <div class="input-group input-group-merge">
+                                <input
+                                    type="password"
+                                    class="form-control"
+                                    id="DB_PASSWORD"
+                                    name="DB_PASSWORD"
+                                    placeholder="Enter your Database password"
+                                    autofocus
+                                    value="{{old('DB_PASSWORD')}}"
+                                />
+                                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                            </div>
                             @include('MyForumBuilder::admin.layouts.input-error',['name'=>'DB_PASSWORD'])
                         </div>
                         @include('MyForumBuilder::admin.layouts.alert')
