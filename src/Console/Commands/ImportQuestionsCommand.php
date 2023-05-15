@@ -81,14 +81,14 @@ class ImportQuestionsCommand extends Command
                                     if (!empty($data['category'])) {
                                         $category = Category::firstOrCreate(
                                             ['name' => $data['category']],
-                                            ['priority' => 99, 'slug' => question_slug($data['category'])]
+                                            ['priority' => 99, 'slug' => Str::slug($data['category'])]
                                         );
                                         $insert['category_id'] = $category->id;
 
                                         if (!empty($data['sub_category'])) {
                                             $subCategory = SubCategory::firstOrCreate(
                                                 ['category_id' => $category->id, 'name' => $data['sub_category']],
-                                                ['priority' => 99, 'slug' => question_slug($data['sub_category'])]
+                                                ['priority' => 99, 'slug' => Str::slug($data['sub_category'])]
                                             );
                                             $insert['sub_category_id'] = $subCategory->id;
                                         }

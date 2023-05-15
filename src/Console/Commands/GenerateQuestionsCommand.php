@@ -99,7 +99,7 @@ class GenerateQuestionsCommand extends Command
             $tag = trim($tag);
             $tag = str_replace('.', '', $tag);
             $tag = Tag::firstOrCreate(
-                ['slug' => question_slug($tag)], ['name' => ucwords($tag)]
+                ['slug' => Str::slug($tag)], ['name' => ucwords($tag)]
             );
             $insert[] = [
                 'question_id' => $question->id,
