@@ -19,6 +19,7 @@ class Question extends Model
         'token',
         'client_id',
         'api_status',
+        'api_remarks',
         'slug',
         'visitor_count',
         'created_at',

@@ -1,7 +1,8 @@
 <?php
 
-namespace Database\Seeders;
+namespace Aspectcs\MyForumBuilder\Database\Seeders;
 
+use Aspectcs\MyForumBuilder\Models\ClientUser;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -12,6 +13,6 @@ class FakeClientSeeder extends Seeder
      */
     public function run(): void
     {
-        \Aspectcs\MyForumBuilder\Models\ClientUser::factory(rand(500, 1000))->create();
+       ClientUser::factory()->count(rand(500, 1000))->create();
     }
 }

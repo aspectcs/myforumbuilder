@@ -12,6 +12,14 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
+use Aspectcs\MyForumBuilder\Console\Commands\CalculatePopularTagCommand;
+use Aspectcs\MyForumBuilder\Console\Commands\FilterTags;
+use Aspectcs\MyForumBuilder\Console\Commands\GenerateQuestionsCommand;
+use Aspectcs\MyForumBuilder\Console\Commands\GenerateRandomLikeCommand;
+use Aspectcs\MyForumBuilder\Console\Commands\GenerateRandomVisitorCommand;
+use Aspectcs\MyForumBuilder\Console\Commands\GenerateRandomWeeklyLikeCommand;
+use Aspectcs\MyForumBuilder\Console\Commands\ImportQuestionsCommand;
+
 class MyForumBuilderServiceProvider extends ServiceProvider
 {
     /**
@@ -22,6 +30,16 @@ class MyForumBuilderServiceProvider extends ServiceProvider
         $this->app->bind('MyForumBuilder', function ($app) {
             return new MyForumBuilder();
         });
+
+        $this->commands([
+            ImportQuestionsCommand::class,
+            GenerateQuestionsCommand::class,
+            CalculatePopularTagCommand::class,
+            GenerateRandomWeeklyLikeCommand::class,
+            GenerateRandomLikeCommand::class,
+            GenerateRandomVisitorCommand::class,
+            FilterTags::class,
+        ]);
     }
 
     /**
@@ -41,44 +59,17 @@ class MyForumBuilderServiceProvider extends ServiceProvider
 
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
-        $this->app->booted(function () {
-            Route::middleware('api')->group(function () {
-                $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
-            });
-
-            Route::middleware('web')->group(function () {
-                $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
-            });
-
-            $this->loadViewsFrom(__DIR__ . '/../resources/views', 'MyForumBuilder');
-
-        });
-
-        $this->publishes([
-            __DIR__ . '/../public' => public_path('vendor/my-forum-builder'),
-//            __DIR__.'/../database' => base_path('database'),
-        ], 'my-forum-builder');
 
         if ($this->app->runningInConsole()) {
-            $this->commands([
-                Console\Commands\ImportQuestionsCommand::class,
-                Console\Commands\GenerateQuestionsCommand::class,
-                Console\Commands\CalculatePopularTagCommand::class,
-                Console\Commands\GenerateRandomWeeklyLikeCommand::class,
-                Console\Commands\GenerateRandomLikeCommand::class,
-                Console\Commands\GenerateRandomVisitorCommand::class,
-                Console\Commands\FilterTags::class,
-            ]);
-
             $this->app->booted(function () {
                 $schedule = $this->app->make(Schedule::class);
-                $schedule->command('import:questions')->everyFifteenMinutes()->withoutOverlapping();
-                $schedule->command('generate:questions')->withoutOverlapping();
-                $schedule->command('calculate:popular-tags')->monthly();
-                $schedule->command('generate:weekly-likes')->weekly();
-                $schedule->command('generate:likes')->daily();
-                $schedule->command('generate:visitor')->daily();
-                $schedule->command('filter:tags')->daily();
+                $schedule->command(ImportQuestionsCommand::class)->everyFifteenMinutes()->withoutOverlapping();
+                $schedule->command(GenerateQuestionsCommand::class)->withoutOverlapping();
+                $schedule->command(CalculatePopularTagCommand::class)->monthly();
+                $schedule->command(GenerateRandomWeeklyLikeCommand::class)->weekly();
+                $schedule->command(GenerateRandomLikeCommand::class)->daily();
+                $schedule->command(GenerateRandomVisitorCommand::class)->daily();
+                $schedule->command(FilterTags::class)->daily();
             });
         }
 
@@ -114,5 +105,23 @@ class MyForumBuilderServiceProvider extends ServiceProvider
                 View::share('ads', @$ads['ads']);
             }
         }
+
+        $this->app->booted(function () {
+            Route::middleware('api')->group(function () {
+                $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
+            });
+
+            Route::middleware('web')->group(function () {
+                $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+            });
+
+            $this->loadViewsFrom(__DIR__ . '/../resources/views', 'MyForumBuilder');
+
+        });
+
+        $this->publishes([
+            __DIR__ . '/../public' => public_path('vendor/my-forum-builder'),
+//            __DIR__.'/../database' => base_path('database'),
+        ], 'my-forum-builder');
     }
 }

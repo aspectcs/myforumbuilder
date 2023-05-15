@@ -115,6 +115,7 @@ Route::middleware(MyForumBuilderSetupChecker::class)->group(function () {
             ]);
 
             Route::patch('question/{question}/popular', [QuestionController::class, 'popular'])->name('question.popular');
+            Route::get('question/{question}/retry', [QuestionController::class, 'retry'])->name('question.retry');
             Route::patch('category/{category}/popular', [CategoriesController::class, 'popular'])->name('category.popular');
             Route::patch('tag/{tag}/popular', [TagsController::class, 'popular'])->name('tag.popular');
 

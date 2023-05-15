@@ -20,6 +20,8 @@
                         @foreach($data->fields as $fields)
                             @include('MyForumBuilder::admin.pages.setting.chunks.'.$fields['type'],['field'=>$fields,'data'=>$data->values])
                         @endforeach
+                        @include('MyForumBuilder::admin.layouts.alert',['name'=>'error'])
+
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>

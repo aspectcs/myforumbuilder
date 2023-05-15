@@ -3,13 +3,17 @@
 namespace Aspectcs\MyForumBuilder\Http\Controllers\Admin;
 
 use Illuminate\Routing\Controller;
-use Aspectcs\MyForumBuilder\Models\Category;
-use Aspectcs\MyForumBuilder\Models\Question;
 use Aspectcs\MyForumBuilder\Models\Scheduler;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Yajra\DataTables\DataTables;
+
+use Aspectcs\MyForumBuilder\Console\Commands\CalculatePopularTagCommand;
+use Aspectcs\MyForumBuilder\Console\Commands\FilterTags;
+use Aspectcs\MyForumBuilder\Console\Commands\GenerateQuestionsCommand;
+use Aspectcs\MyForumBuilder\Console\Commands\GenerateRandomLikeCommand;
+use Aspectcs\MyForumBuilder\Console\Commands\GenerateRandomVisitorCommand;
+use Aspectcs\MyForumBuilder\Console\Commands\GenerateRandomWeeklyLikeCommand;
+use Aspectcs\MyForumBuilder\Console\Commands\ImportQuestionsCommand;
 
 class SchedulerController extends Controller
 {
@@ -153,7 +157,7 @@ class SchedulerController extends Controller
     {
         switch ($type) {
             case 'import-questions':
-                Artisan::call('import:questions');
+                Artisan::call(ImportQuestionsCommand::class);
                 break;
             case 'calculate-popular-tags':
                 Artisan::call('calculate:popular-tags');

@@ -3,13 +3,12 @@
 namespace Aspectcs\MyForumBuilder\Http\Controllers;
 
 use Aspectcs\MyForumBuilder\Facades\MyForumBuilder;
-use Aspectcs\MyForumBuilder\Database\Seeders\SettingsSeeder;
-use Aspectcs\MyForumBuilder\Models\Setting;
 use Aspectcs\MyForumBuilder\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -18,8 +17,19 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Config;
 
+use Aspectcs\MyForumBuilder\Database\Seeders\SettingsSeeder;
+use Aspectcs\MyForumBuilder\Database\Seeders\FakeClientSeeder;
+
 class SetupController extends Controller
 {
+    public function __construct(Redirector $redirect)
+    {
+        if (env('MY_FORUM_BUILDER_SETUP', null) === 'Completed') {
+            $redirect->to('/')->send();
+            die;
+        }
+    }
+
     function step1()
     {
         return view('MyForumBuilder::setup.step1');
@@ -37,12 +47,16 @@ class SetupController extends Controller
 
     function step4()
     {
-        $response = MyForumBuilder::details();
-        if ($response->ok()) {
-            $email = $response->json('user.email');
-            return view('MyForumBuilder::setup.step4', ['email' => $email]);
-        } else {
-            abort(401);
+        try {
+            $response = MyForumBuilder::details();
+            if ($response->ok()) {
+                $email = $response->json('user.email');
+                return view('MyForumBuilder::setup.step4', ['email' => $email]);
+            }
+        } catch (Exception $e) {
+            return redirect()->route('setup.step2')->withErrors([
+                'error' => $e->getMessage()
+            ]);
         }
     }
 
@@ -109,7 +123,6 @@ class SetupController extends Controller
                 try {
                     $response = MyForumBuilder::validateKeys($insert['APP_KEY'], $insert['APP_SECRET']);
                     if ($response->ok()) {
-                        $insert['APP_KEY'] = 'base64:' . $insert['APP_KEY'];
                         foreach ($insert as $key => $value) {
                             put_permanent_env($key, trim($value));
                         }
@@ -126,6 +139,7 @@ class SetupController extends Controller
                 try {
                     Artisan::call('migrate');
                     Artisan::call("db:seed", ['--class' => SettingsSeeder::class]);
+                    Artisan::call("db:seed", ['--class' => FakeClientSeeder::class]);
                     put_permanent_env('FORUM_START_DATE', Carbon::now()->subYears(2)->format('Y-m-d'));
                     $message = 'Database Migrated.';
                 } catch (Exception $e) {
@@ -157,7 +171,8 @@ class SetupController extends Controller
                         ], [
                             'name' => $response->json('user.name'),
                             'password' => Hash::make($insert['ADMIN_PASSWORD']),
-                            'is_admin' => true
+                            'is_admin' => true,
+                            'email_verified_at' => Carbon::now()
                         ]);
                         Auth::guard('forum-admin')->login($user);
                         $message = 'Admin Created.';

@@ -2,12 +2,12 @@
 
 namespace Aspectcs\MyForumBuilder\Models;
 
+use Aspectcs\MyForumBuilder\Database\Factories\ClientUserFactory;
 use Aspectcs\MyForumBuilder\Enums\ClientUserType;
-use Database\Factories\ClientUserFactory;
+
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Sanctum\HasApiTokens;
 
 class ClientUser extends Model
 {

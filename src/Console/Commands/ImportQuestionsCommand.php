@@ -121,7 +121,7 @@ class ImportQuestionsCommand extends Command
                                 }
                             } catch (\Exception $e) {
                                 $error++;
-                                $remarks[] = htmlspecialchars($e->getMessage()) . 'on line no ' . $line;
+                                $remarks[] = htmlspecialchars($e->getMessage()) . ' on line no ' . $line;
                             }
                         }
                     }

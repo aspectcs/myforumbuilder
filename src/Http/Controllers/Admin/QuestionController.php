@@ -22,7 +22,7 @@ class QuestionController extends Controller
     {
         return view('MyForumBuilder::admin.common.dataTableTools',
             [
-                'addNew' => route('admin.question.create'),
+//                'addNew' => route('admin.question.create'),
                 'import' => route('admin.questions.import.create'),
                 'breadcrumb' => [
                     'heading' => 'Questions',
@@ -56,10 +56,6 @@ class QuestionController extends Controller
                             "data" => "question",
                         ],
                         [
-                            "title" => "Token Used",
-                            "data" => "total_tokens",
-                        ],
-                        [
                             "title" => "Popular",
                             "className" => "text-center",
                             "data" => "popular",
@@ -70,6 +66,20 @@ class QuestionController extends Controller
                             "title" => "Status",
                             "className" => "text-center",
                             "data" => "status",
+                            "sortable" => false,
+                            "searchable" => false
+                        ],
+                        [
+                            "title" => "API STATUS",
+                            "className" => "text-center",
+                            "data" => "api_status",
+                            "sortable" => false,
+                            "searchable" => false
+                        ],
+                        [
+                            "title" => "API Remarks",
+                            "className" => "text-center",
+                            "data" => "api_remarks",
                             "sortable" => false,
                             "searchable" => false
                         ],
@@ -115,14 +125,15 @@ class QuestionController extends Controller
                 'category_id',
                 'sub_category_id',
                 'question',
-                'total_tokens',
                 'status',
                 'popular',
                 'slug',
+                'api_status',
+                'api_remarks',
                 'created_at',
                 'updated_at'
             ]
-        )->with('category','sub_category')->orderBy('id', 'DESC');
+        )->with('category', 'sub_category')->orderBy('id', 'DESC');
 
         return Datatables::of($query)
             ->addIndexColumn()
@@ -148,11 +159,15 @@ class QuestionController extends Controller
                 ]);
             })
             ->addColumn('action', function (Question $question) {
-                return view('MyForumBuilder::admin.common.action', [
+                $actions = [
                     'view' => route('question', $question->slug),
                     'edit' => route('admin.question.edit', $question->encrypt_id),
                     'delete' => route('admin.question.destroy', $question->encrypt_id)
-                ]);
+                ];
+                if ($question->api_status == 'E') {
+                    $actions['retry'] = route('admin.question.retry', $question->encrypt_id);
+                }
+                return view('MyForumBuilder::admin.common.action', $actions);
             })
             ->addColumn('created_at', function (Question $question) {
                 return $question->created_at->format('M j, Y, h:i a');
@@ -297,6 +312,17 @@ class QuestionController extends Controller
             'status' => 200,
             'message' => 'Successfully deleted!'
         ]);
+    }
+
+    /**
+     * Retry the specified resource from storage.
+     */
+    public function retry(Question $question)
+    {
+        $question->api_status = 'P';
+        $question->api_remarks = null;
+        $question->save();
+        return back();
     }
 
 }

@@ -2,6 +2,8 @@
 
 namespace Aspectcs\MyForumBuilder\Http\Controllers\Admin;
 
+use Aspectcs\MyForumBuilder\Facades\MyForumBuilder;
+use Exception;
 use Illuminate\Routing\Controller;
 use Aspectcs\MyForumBuilder\Models\Setting;
 use Illuminate\Database\Eloquent\Model;
@@ -145,6 +147,15 @@ class SettingsController extends Controller
     public function update(Request $request, Setting $setting)
     {
         $data = [];
+        if ($setting->id == 10) {
+            try {
+                $response = MyForumBuilder::validateKeys($request->post('APP_KEY'), $request->post('APP_SECRET'));
+            } catch (Exception $e) {
+                return redirect()->back()->withErrors([
+                    'error' => $e->getMessage()
+                ]);
+            }
+        }
         foreach ($setting->fields as $field) {
             switch ($field['type']) {
                 case 'file':

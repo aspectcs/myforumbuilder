@@ -4,7 +4,7 @@ Add the below content to composer.json in laravel 10
 
     "require": {
         ....
-        "aspectcs/myforumbuilder": "1.0.0"
+        "aspectcs/myforumbuilder": "^1.0.0"
     },
     "repositories": [
         {

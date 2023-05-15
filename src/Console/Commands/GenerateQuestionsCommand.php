@@ -2,11 +2,13 @@
 
 namespace Aspectcs\MyForumBuilder\Console\Commands;
 
+use Aspectcs\MyForumBuilder\Facades\MyForumBuilder;
 use Aspectcs\MyForumBuilder\Models\ClientUser;
 use Aspectcs\MyForumBuilder\Models\Question;
 use Aspectcs\MyForumBuilder\Models\Tag;
 use Aspectcs\MyForumBuilder\Models\TagsMapping;
 use Aspectcs\MyForumBuilder\Traits\MyForumBuilderTrait;
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
@@ -38,23 +40,32 @@ class GenerateQuestionsCommand extends Command
     {
         $questions = Question::where('api_status', 'P')->take(1)->get();
         foreach ($questions as $question) {
-            $this->turboPrompt = [];
-            $question->api_status = 'IP';
-            $question->save();
+            try {
+                $response = MyForumBuilder::question($question);
+                $this->turboPrompt = [];
+                $question->api_status = 'IP';
+                $question->save();
 
-            if($question->description == null){
-                $this->generateDescription($question);
-                sleep(3);
-            }
-            if($question->tags == null) {
-                $this->generateTags($question);
-                sleep(3);
-            }
+                if ($question->description == null) {
+                    $this->generateDescription($question);
+                    sleep(3);
+                }
 
-            $this->generateAnswers($question);
+                if ($question->tags == null) {
+                    $this->generateTags($question);
+                    sleep(3);
+                }
+
+                $this->generateAnswers($question);
 //            sleep(3);
-            $question->api_status = 'S';
-            $question->save();
+                $question->api_status = 'S';
+                $question->save();
+            } catch (Exception $e) {
+                MyForumBuilder::error($question, $e->getMessage());
+                $question->api_status = 'E';
+                $question->api_remarks = 'Error has been reported to admin we will get back to you soon.';
+                $question->save();
+            }
         }
     }
 
@@ -65,7 +76,6 @@ class GenerateQuestionsCommand extends Command
         $turboPrompt[] = ['role' => 'user', 'content' => $prompt];
         $result = $this->AITurbo($turboPrompt);
 
-        $question->openai_token = $result['id'];
         $question->description = trim($result['choices'][0]['message']['content'], '"');
         $question->total_tokens += $result['usage']['total_tokens'];
         $question->save();

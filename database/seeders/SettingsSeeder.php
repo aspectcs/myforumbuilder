@@ -32,12 +32,19 @@ class SettingsSeeder extends Seeder
 
         Setting::checkAndCreate(['id' => '10'], [
             'priority' => $priority++,
-            'title' => 'API Key',
+            'title' => 'APP Keys',
             'fields' => [
                 [
-                    'name' => 'OPENAI_API_KEY',
+                    'name' => 'APP_KEY',
                     'type' => 'env',
-                    'label' => 'API Key',
+                    'fieldType'=>'hidden',
+                    'label' => 'APP Key',
+                ],
+                [
+                    'name' => 'APP_SECRET',
+                    'type' => 'env',
+                    'fieldType'=>'hidden',
+                    'label' => 'APP Secret',
                 ],
             ],
             'values' => null
@@ -284,6 +291,7 @@ class SettingsSeeder extends Seeder
                 [
                     'name' => 'FORUM_START_DATE',
                     'type' => 'env',
+                    'fieldType'=>'date',
                     'label' => 'Forum Start Date (YYYY-MM-DD) example (2020-10-01)',
                 ],
             ],

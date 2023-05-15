@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Factories;
+namespace Aspectcs\MyForumBuilder\Database\Factories;
 
 use Aspectcs\MyForumBuilder\Enums\ClientUserType;
 use Aspectcs\MyForumBuilder\Models\ClientUser;
@@ -12,6 +12,7 @@ use Illuminate\Support\Carbon;
  */
 class ClientUserFactory extends Factory
 {
+    protected $model = ClientUser::class;
     /**
      * Define the model's default state.
      *

@@ -26,10 +26,10 @@ return new class extends Migration {
 
             $table->text('question');
             $table->text('description')->nullable(true)->default(null);
-            $table->text('openai_token')->nullable(true)->default(null);
             $table->boolean('status')->default(true);
             $table->boolean('popular')->default(false);
-            $table->enum('api_status', ['N/A', 'P', 'S', 'IP'])->default('N/A');
+            $table->enum('api_status', ['N/A', 'E', 'P', 'S', 'IP'])->default('N/A');
+            $table->text('api_remarks')->nullable(true)->default(null);
 
             $table->unsignedBigInteger('total_tokens')->nullable(true)->default(0);
 
