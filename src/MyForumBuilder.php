@@ -15,7 +15,7 @@ use Illuminate\Support\Str;
 
 class MyForumBuilder
 {
-    private static string $api_url = 'https//api.myforumbuilder.com/api/v1/';
+    private static string $api_url = 'https://api.myforumbuilder.com/api/v1/';
 //    private static string $api_url = '//acs.forum-api.com:8888/api/v1/';
     private static string|null $cipher = 'AES-256-CBC';
     private static string|null $app_key;
