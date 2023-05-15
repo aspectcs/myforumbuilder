@@ -5,7 +5,7 @@ Add the below content to composer.json in laravel 10
 
     "repositories": [
         {
-            "type": "git",
+            "type": "vcs",
             "url": "https://github.com/aspectcs/myforumbuilder.git"
         }
     ],
@@ -16,7 +16,7 @@ To install package in laravel
 
 Auto
 
-    composer require aspectcs/myforumbuilder
+    composer require aspectcs/myforumbuilder:dev-main
 OR
 
 Manual Process
@@ -29,6 +29,10 @@ Manual Process
 use composer update aspectcs/myforumbuilder to update All Packages
 
     composer update aspectcs/myforumbuilder
+
+add all files into autoload
+
+    composer dump-autoload
 
 Publish Package
 
