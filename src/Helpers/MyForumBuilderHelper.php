@@ -22,6 +22,12 @@ if (!function_exists('popularTag')) {
         return \Aspectcs\MyForumBuilder\Models\Tag::popular()->take($count)->get();
     }
 }
+if (!function_exists('question_slug')) {
+    function question_slug($text)
+    {
+        return \Illuminate\Support\Str::slug($text, '-', 'en', ['&' => 'and', '/' => '-', '%' => '-percent']);
+    }
+}
 if (!function_exists('getSetting')) {
     function getSetting($id)
     {

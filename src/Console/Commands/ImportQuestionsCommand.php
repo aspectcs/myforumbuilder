@@ -81,14 +81,14 @@ class ImportQuestionsCommand extends Command
                                     if (!empty($data['category'])) {
                                         $category = Category::firstOrCreate(
                                             ['name' => $data['category']],
-                                            ['priority' => 99, 'slug' => Str::slug($data['category'])]
+                                            ['priority' => 99, 'slug' => question_slug($data['category'])]
                                         );
                                         $insert['category_id'] = $category->id;
 
                                         if (!empty($data['sub_category'])) {
                                             $subCategory = SubCategory::firstOrCreate(
                                                 ['category_id' => $category->id, 'name' => $data['sub_category']],
-                                                ['priority' => 99, 'slug' => Str::slug($data['sub_category'])]
+                                                ['priority' => 99, 'slug' => question_slug($data['sub_category'])]
                                             );
                                             $insert['sub_category_id'] = $subCategory->id;
                                         }
@@ -101,7 +101,7 @@ class ImportQuestionsCommand extends Command
                                     $user = ClientUser::fake()->inRandomOrder()->first();
                                     $insert['client_id'] = $user->id;
 
-                                    $insert['slug'] = Str::slug($insert['question']);
+                                    $insert['slug'] = question_slug($insert['question']);
 
                                     $carbon = Carbon::parse($forumStartDate)->addDays(90);
                                     $carbonToday = Carbon::now()->subDays(7);

@@ -6,6 +6,7 @@ namespace Aspectcs\MyForumBuilder;
 
 use Aspectcs\MyForumBuilder\Models\Question;
 use Carbon\Carbon;
+use Composer\InstalledVersions;
 use Illuminate\Encryption\Encrypter;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Config;
@@ -14,11 +15,15 @@ use Illuminate\Support\Str;
 
 class MyForumBuilder
 {
-    private static string $api_url = '//api.chumgpt.ai/api/v1/';
+//    private static string $api_url = '//api.myforumbuilder.com/api/v1/';
+    private static string $api_url = '//acs.forum-api.com:8888/api/v1/';
     private static string|null $cipher = 'AES-256-CBC';
     private static string|null $app_key;
     private static string|null $app_secret;
     private static string|null $app_token;
+
+    private static string $package = 'aspectcs/myforumbuilder';
+
 
     /**
      * @throws \ErrorException
@@ -72,7 +77,7 @@ class MyForumBuilder
             if ($response->unauthorized()) {
                 throw new \ErrorException($response->json('message'));
             } else {
-                throw new \ErrorException($response->json('message'));
+                throw new \ErrorException($response);
             }
         });
     }
@@ -96,6 +101,7 @@ class MyForumBuilder
 
     /**
      * @throws \ErrorException
+     * @throws \Exception
      */
     public static function question(Question $question)
     {
@@ -130,4 +136,33 @@ class MyForumBuilder
         ]);
     }
 
+    /**
+     * @throws \Exception
+     */
+    public static function checkUpdate()
+    {
+        self::decryptKeys();
+        if (InstalledVersions::isInstalled(self::$package)) {
+            $version = InstalledVersions::getPrettyVersion(self::$package);
+        } else {
+            throw new \ErrorException('Package not installed');
+        }
+        $response = Http::acceptJson()->withToken(self::$app_token)->post(self::$api_url . 'check-update', [
+            'version' => $version,
+            'timestamp' => Carbon::now()
+        ]);
+        $response->onError(function (Response $response) {
+            if ($response->unauthorized()) {
+                throw new \ErrorException($response->json('message'));
+            } else {
+                throw new \ErrorException($response->json('message'));
+            }
+        });
+        return $response;
+    }
+
+    public static function update()
+    {
+        return shell_exec('composer update ' . self::$package);
+    }
 }

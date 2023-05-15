@@ -4,6 +4,7 @@ use Aspectcs\MyForumBuilder\Http\Controllers\Admin\AdminDashboard;
 use Aspectcs\MyForumBuilder\Http\Controllers\Admin\AnswerController;
 use Aspectcs\MyForumBuilder\Http\Controllers\Admin\AuthenticationController;
 use Aspectcs\MyForumBuilder\Http\Controllers\Admin\CategoriesController;
+use Aspectcs\MyForumBuilder\Http\Controllers\AppUpdateController;
 use Aspectcs\MyForumBuilder\Http\Controllers\Client\ClientController;
 use Aspectcs\MyForumBuilder\Http\Controllers\SetupController;
 use Aspectcs\MyForumBuilder\Http\Controllers\Client\SitemapController;
@@ -20,6 +21,7 @@ use Aspectcs\MyForumBuilder\Http\Controllers\Admin\UserController;
 use Aspectcs\MyForumBuilder\Http\Middleware\MyForumBuilderSetupChecker;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +34,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('test-slug', function () {
+    $text = 'How does a Doberman/Dachshund mix interact with children?';
+    return [];
+});
 Route::get('login', function () {
     return redirect()->route('admin.login');
 })->name('login');
@@ -138,6 +144,9 @@ Route::middleware(MyForumBuilderSetupChecker::class)->group(function () {
                 Route::get("/", 'index')->name("index");
                 Route::post("json", 'json')->name("json");
             });
+
+            Route::get("check-update", [AppUpdateController::class, 'check_update'])->name("check-update");
+            Route::get("do-update", [AppUpdateController::class, 'do_update'])->name("do-update");
         });
     });
 
