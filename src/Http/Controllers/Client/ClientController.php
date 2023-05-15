@@ -62,7 +62,7 @@ class ClientController extends Controller
             ],
             [
                 'label' => 'Community',
-                'href' => route('home')
+                'href' => route('home').'/'
             ],
             [
                 'label' => $tag->name,
@@ -98,7 +98,7 @@ class ClientController extends Controller
             ],
             [
                 'label' => 'Community',
-                'href' => route('home')
+                'href' => route('home').'/'
             ],
             [
                 'label' => $category->name,
@@ -135,7 +135,7 @@ class ClientController extends Controller
             ],
             [
                 'label' => 'Community',
-                'href' => route('home')
+                'href' => route('home').'/'
             ],
             [
                 'label' => $category->name,
@@ -177,7 +177,7 @@ class ClientController extends Controller
         ];
         $breadcrumbs[] = [
             'label' => 'Community',
-            'href' => route('home')
+            'href' => route('home').'/'
         ];
         $breadcrumbs[] = [
             'label' => $question->category->name,

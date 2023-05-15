@@ -34,7 +34,7 @@
                     <div class="thankyou-wrapper">
                        <img class="img-fluid" src="@assets('img/thankyou.webp')" alt="thanks" />
                         <p>for contacting us, we will get in touch with you soon... </p>
-                        <a class="btn btn-outline-primary w-auto" href="@route('home')">Back to home</a>
+                        <a class="btn btn-outline-primary w-auto" href="@route('home')/">Back to home</a>
                         <div class="clr"></div>
                     </div>
                     <div class="clr"></div>

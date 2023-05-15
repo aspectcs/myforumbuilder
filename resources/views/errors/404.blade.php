@@ -24,7 +24,7 @@
                 {{--<form action="#" class="error_search">
                     <input type="text" class="form-control" placeholder="Search">
                 </form>--}}
-                <a href="@route('home')" class="action_btn box_shadow_none"><i class="arrow_left"></i>Back to Home Page</a>
+                <a href="@route('home')/" class="action_btn box_shadow_none"><i class="arrow_left"></i>Back to Home Page</a>
             </div>
         </div>
     </section>

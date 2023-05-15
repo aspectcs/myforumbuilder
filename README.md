@@ -16,7 +16,7 @@ To install package in laravel
 
 Auto
 
-    composer require aspectcs/myforumbuilder:dev-main
+    composer require aspectcs/myforumbuilder
 OR
 
 Manual Process

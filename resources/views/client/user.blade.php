@@ -23,7 +23,7 @@
             <div class="doc_banner_content">
                 <h2 class="">{{$client->username}}</h2>
                 <ul class="breadcrumb justify-content-center">
-                    <li class="breadcrumb-item"><a href="@route('home')">Home</a></li>
+                    <li class="breadcrumb-item"><a href="@route('home')/">Home</a></li>
                     <li class="breadcrumb-item"><a class="active" href="#">Profile Member</a></li>
                 </ul>
             </div>

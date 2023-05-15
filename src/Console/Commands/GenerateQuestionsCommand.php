@@ -97,14 +97,16 @@ class GenerateQuestionsCommand extends Command
 
         foreach ($tags as $tag) {
             $tag = trim($tag);
-            $tag = str_replace('.', '', $tag);
-            $tag = Tag::firstOrCreate(
-                ['slug' => Str::slug($tag)], ['name' => ucwords($tag)]
-            );
-            $insert[] = [
-                'question_id' => $question->id,
-                'tag_id' => $tag->id
-            ];
+            if (!empty($tag)) {
+                $tag = str_replace('.', '', $tag);
+                $tag = Tag::firstOrCreate(
+                    ['slug' => Str::slug($tag)], ['name' => ucwords($tag)]
+                );
+                $insert[] = [
+                    'question_id' => $question->id,
+                    'tag_id' => $tag->id
+                ];
+            }
 
         }
         TagsMapping::insert($insert);

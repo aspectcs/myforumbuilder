@@ -2,6 +2,7 @@
 
 namespace Aspectcs\MyForumBuilder\Http\Controllers\Admin;
 
+use Aspectcs\MyForumBuilder\Models\TagsMapping;
 use Illuminate\Routing\Controller;
 use Aspectcs\MyForumBuilder\Models\Category;
 use Aspectcs\MyForumBuilder\Models\Question;
