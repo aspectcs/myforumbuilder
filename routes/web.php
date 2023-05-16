@@ -34,10 +34,6 @@ use Illuminate\Support\Str;
 |
 */
 
-Route::get('test-slug', function () {
-    $text = 'How does a Doberman/Dachshund mix interact with children?';
-    return [];
-});
 Route::get('login', function () {
     return redirect()->route('admin.login');
 })->name('login');
