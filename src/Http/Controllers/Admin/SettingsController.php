@@ -44,13 +44,13 @@ class SettingsController extends Controller
                             "title" => "Title",
                             "data" => "title",
                         ],
-                        [
+                        /*[
                             "title" => "Status",
                             "className" => "text-center",
                             "data" => "status",
                             "sortable" => false,
                             "searchable" => false
-                        ],
+                        ],*/
                         [
                             "title" => "Created at",
                             "data" => "created_at",
@@ -94,12 +94,12 @@ class SettingsController extends Controller
         )->orderBy('priority', 'ASC');
         return Datatables::of($query)
             ->addIndexColumn()
-            ->addColumn('status', function (Setting $setting) {
+           /* ->addColumn('status', function (Setting $setting) {
                 return view('MyForumBuilder::admin.common.status', [
                     'status' => $setting->status,
                     'updateUrl' => route('admin.setting.status', $setting->encrypt_id),
                 ]);
-            })
+            })*/
             ->addColumn('action', function (Setting $setting) {
                 return view('MyForumBuilder::admin.common.action', [
                     'edit' => route('admin.setting.edit', $setting->encrypt_id),

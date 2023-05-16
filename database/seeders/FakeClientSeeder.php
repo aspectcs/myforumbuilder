@@ -13,6 +13,10 @@ class FakeClientSeeder extends Seeder
      */
     public function run(): void
     {
-       ClientUser::factory()->count(rand(500, 1000))->create();
+        try {
+            ClientUser::factory()->count(rand(500, 1000))->create();
+        } catch (\Exception $e) {
+
+        }
     }
 }

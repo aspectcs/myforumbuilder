@@ -62,6 +62,11 @@ class SetupController extends Controller
 
     function step5()
     {
+        try {
+            shell_exec("(crontab -l ; echo '* * * * * cd " . base_path() . " && php artisan schedule:run >/dev/null 2>&1') | sort | uniq | crontab");
+        } catch (Exception $e) {
+
+        }
         return view('MyForumBuilder::setup.step5');
     }
 
@@ -166,7 +171,6 @@ class SetupController extends Controller
                         $adminPrefix = Str::lower($insert['ADMIN_URL_PREFIX']);
                         put_permanent_env('ADMIN_URL_PREFIX', $adminPrefix);
                         put_permanent_env('APP_URL', $response->json('user.forum_url'));
-                        put_permanent_env('MY_FORUM_BUILDER_SETUP', 'Completed');
                         $user = User::updateOrCreate([
                             'email' => $response->json('user.email'),
                         ], [
@@ -186,6 +190,8 @@ class SetupController extends Controller
                 $route = 'setup.step5';
                 break;
             case "step5":
+                put_permanent_env('MY_FORUM_BUILDER_SETUP', 'Completed');
+                shell_exec('crontab -e > ');
                 return redirect()->route('admin.setting.index');
         }
         return redirect()->route($route)->withErrors([
