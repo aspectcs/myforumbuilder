@@ -74,8 +74,4 @@ class ClientUser extends Model
     {
         return $query->where('type', ClientUserType::REAL);
     }
-    protected static function newFactory()
-    {
-        return ClientUserFactory::new();
-    }
 }

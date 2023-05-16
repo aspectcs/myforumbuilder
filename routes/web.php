@@ -18,6 +18,7 @@ use Aspectcs\MyForumBuilder\Http\Controllers\Admin\SettingsController;
 use Aspectcs\MyForumBuilder\Http\Controllers\Admin\SubCategoryController;
 use Aspectcs\MyForumBuilder\Http\Controllers\Admin\TagsController;
 use Aspectcs\MyForumBuilder\Http\Controllers\Admin\UserController;
+use Aspectcs\MyForumBuilder\Http\Middleware\MyForumBuilderAdminChecker;
 use Aspectcs\MyForumBuilder\Http\Middleware\MyForumBuilderSetupChecker;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
@@ -90,7 +91,7 @@ Route::middleware(MyForumBuilderSetupChecker::class)->group(function () {
     Route::prefix(env('ADMIN_URL_PREFIX', '--admin--'))->name('admin.')->group(function () {
         Route::get('login', [AuthenticationController::class, 'login'])->name('login');
         Route::post('login', [AuthenticationController::class, 'loginMeIn']);
-        Route::middleware('auth:forum-admin')->group(function () {
+        Route::middleware(['auth:forum-admin', MyForumBuilderAdminChecker::class])->group(function () {
             Route::get('/', [AdminDashboard::class, 'dashboard'])->name('dashboard');
             Route::get('change-password', [AuthenticationController::class, 'change_password'])->name('change-password');
             Route::put('change-password', [AuthenticationController::class, 'change_password_process'])->name('change-password');

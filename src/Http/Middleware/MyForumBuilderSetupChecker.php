@@ -2,10 +2,12 @@
 
 namespace Aspectcs\MyForumBuilder\Http\Middleware;
 
+use Aspectcs\MyForumBuilder\Facades\MyForumBuilder;
 use Aspectcs\MyForumBuilder\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Mockery\Exception;
 use Symfony\Component\HttpFoundation\Response;
 
 class MyForumBuilderSetupChecker

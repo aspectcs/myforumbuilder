@@ -131,6 +131,7 @@ class SetupController extends Controller
                         foreach ($insert as $key => $value) {
                             put_permanent_env($key, trim($value));
                         }
+                        put_permanent_env('FORUM_START_DATE', Carbon::now()->subYears(2)->format('Y-m-d'));
                         $message = 'Token validate from server.';
                     }
                 } catch (Exception $e) {
@@ -142,10 +143,9 @@ class SetupController extends Controller
                 break;
             case "step3":
                 try {
-                    Artisan::call('migrate');
-                    Artisan::call("db:seed", ['--class' => SettingsSeeder::class]);
-                    Artisan::call("db:seed", ['--class' => FakeClientSeeder::class]);
-                    put_permanent_env('FORUM_START_DATE', Carbon::now()->subYears(2)->format('Y-m-d'));
+                    Artisan::call('migrate', ['--force' => true]);
+                    Artisan::call("db:seed", ['--class' => SettingsSeeder::class, '--force' => true]);
+                    Artisan::call("db:seed", ['--class' => FakeClientSeeder::class, '--force' => true]);
                     $message = 'Database Migrated.';
                 } catch (Exception $e) {
                     return back()->withErrors([
@@ -191,7 +191,6 @@ class SetupController extends Controller
                 break;
             case "step5":
                 put_permanent_env('MY_FORUM_BUILDER_SETUP', 'Completed');
-                shell_exec('crontab -e > ');
                 return redirect()->route('admin.setting.index');
         }
         return redirect()->route($route)->withErrors([
