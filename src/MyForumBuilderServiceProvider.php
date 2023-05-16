@@ -27,6 +27,8 @@ class MyForumBuilderServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->usePublicPath(realpath(base_path('../')));
+        
         $this->app->bind('MyForumBuilder', function ($app) {
             return new MyForumBuilder();
         });
@@ -47,10 +49,6 @@ class MyForumBuilderServiceProvider extends ServiceProvider
      */
     public function boot(Router $router): void
     {
-        $this->app->bind('path.public', function() {
-            return realpath(base_path().'/../');
-        });
-
         Config::set('auth.guards.forum-admin', [
             'driver' => 'session',
             'provider' => 'forum-admin',
